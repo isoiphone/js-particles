@@ -11,7 +11,7 @@
     })();
 
     var width, height, scale,
-        canvas, context,
+        canvas, context, pointSize,
         didInit;
 
     var particles, dot;
@@ -27,7 +27,7 @@
         var h = maxy-miny;
         context.translate(width*0.5,height*0.5);
         context.scale(width/w, height/h);
-        context.lineWidth = 1.0/width;
+        context.lineWidth = pointSize = 1.0/width;
     }
 
     function update(){
@@ -56,14 +56,18 @@
 
         context.save();
 
-        viewport(-2,-2,+2,+2);
+        viewport(-1,-1,+1,+1);
 
         context.beginPath();
         context.moveTo(0, -1);
         context.lineTo(0, +1);
         context.moveTo(-1, 0);
         context.lineTo(+1, 0);
+
         context.stroke();
+
+        context.fillStyle = "#FF00FF";
+        context.fillRect(0, 0, pointSize, pointSize);
 
         context.restore();
 
