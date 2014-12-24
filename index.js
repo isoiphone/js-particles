@@ -11,29 +11,40 @@
     })();
 
     var width, height, scale,
-        canvas, ctx,
+        canvas, context,
         particles,
         didInit;
 
+    var dot;
+
     function Particle(x,y){
-        this.x = x+Math.random()*32-16;
-        this.y = y+Math.random()*32-16;
+        this.x = ~~(x + Math.random()*32-16);
+        this.y = ~~(y + Math.random()*32-16);
     }
 
     function update(){
-        ctx.fillStyle = 'rgba(32,32,32,0.3)';
-        ctx.fillRect(0, 0, width, height);
+        context.fillStyle = 'rgba(32,32,32,1)';
+        context.fillRect(0, 0, width, height);
 
-        ctx.fillStyle = 'rgba(255,255,255,1)';
+        context.fillStyle = 'rgba(255,255,255,1)';
+        context.strokeStyle = '#FFFFFF';
         for (var i=0;i<particles.length;++i) {
             var p = particles[i];
-            ctx.fillRect(p.x, p.y, 2, 2);
+
+            context.fillRect(p.x, p.y, 1, 1);
+
+            // context.beginPath();
+            // context.moveTo(p.x, p.y);
+            // context.lineTo(p.x+1, p.y);
+            // context.stroke();
+
+            //context.putImageData(dot, p.x*scale, p.y*scale);
         }
 
-        ctx.lineWidth=1;
-        ctx.fillStyle="#CCCCCC";
-        ctx.font="16px sans-serif";
-        ctx.fillText(""+width+"x"+height+"@"+scale+"x", 10, 25);
+        context.lineWidth=1;
+        context.fillStyle="#CCCCCC";
+        context.font="16px sans-serif";
+        context.fillText(""+width+"x"+height+"@"+scale+"x", 10, 25);
 
         requestAnimationFrame(update);
     }
@@ -42,25 +53,43 @@
         canvas = document.getElementById("canvas") || document.createElement("canvas");
         canvas.id = 'canvas';
         document.body.appendChild(canvas);
+        context = canvas.getContext("2d");
+        context.imageSmoothingEnabled = context.mozImageSmoothingEnabled = context.webkitImageSmoothingEnabled = false;
         resizeCanvas();
-        ctx = canvas.getContext("2d");
-        ctx.scale(scale, scale);
+        context.scale(scale, scale);
 
         particles = [];
 
         if(!didInit){
             didInit = true;
+
+            dot = context.createImageData(1, 1);
+            dot[0] = dot[1] = dot[2] = dot[3] = 255;
+
             update();
             bindEvents();
         }
     }
 
     function resizeCanvas(){
-        scale = window.devicePixelRatio || 1;
-        canvas.width = width = window.innerWidth * scale;
-        canvas.height = height = window.innerHeight * scale;
-        canvas.style.width = window.innerWidth + 'px';
-        canvas.style.height = window.innerHeight + 'px';
+        var devicePixelRatio = window.devicePixelRatio || 1;
+
+        var backingStoreRatio = context.webkitBackingStorePixelRatio ||
+                                context.mozBackingStorePixelRatio ||
+                                context.msBackingStorePixelRatio ||
+                                context.oBackingStorePixelRatio ||
+                                context.backingStorePixelRatio || 1;
+        
+        scale = devicePixelRatio / backingStoreRatio;
+
+        var oldWidth = window.innerWidth;
+        var oldHeight = window.innerHeight;
+
+        canvas.width = width = oldWidth * scale;
+        canvas.height = height = oldHeight * scale;
+
+        canvas.style.width = oldWidth + 'px';
+        canvas.style.height = oldHeight + 'px';
     }
 
     function mouseMove(e){
@@ -76,7 +105,7 @@
         window.addEventListener('touchmove', function(e){
             e.preventDefault();
             var touch = e.changedTouches[0];
-            mouseMove({'x':touch.clientX,'y':touch.clientY});
+            mouseMove({'x':~~touch.clientX,'y':~~touch.clientY});
         });
     }
 
