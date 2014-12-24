@@ -21,6 +21,15 @@
         this.y = ~~(y + Math.random()*32-16);
     }
 
+    // set up context so drawing area is bounded by given coordinates
+    function viewport(minx,miny,maxx,maxy) {
+        var w = maxx-minx;
+        var h = maxy-miny;
+        context.translate(width*0.5,height*0.5);
+        context.scale(width/w, height/h);
+        context.lineWidth = 1.0/width;
+    }
+
     function update(){
         context.fillStyle = 'rgba(32,32,32,0.3)';
         context.fillRect(0, 0, width, height);
@@ -28,22 +37,35 @@
         context.fillStyle = '#FFFFFF';
         context.strokeStyle = '#FFFFFF';
 
-        for (var i=0;i<particles.length;++i) {
-            var p = particles[i];
+        // for (var i=0;i<particles.length;++i) {
+        //     var p = particles[i];
 
-            context.fillRect(p.x, p.y, 1, 1);
+        //     context.fillRect(p.x, p.y, 1, 1);
 
-            // context.beginPath();
-            // context.arc(p.x,p.y,10,0,2*Math.PI);
-            // context.fill();
+        //     // context.beginPath();
+        //     // context.arc(p.x,p.y,10,0,2*Math.PI);
+        //     // context.fill();
 
-            // context.beginPath();
-            // context.moveTo(p.x, p.y);
-            // context.lineTo(p.x+1, p.y);
-            // context.stroke();
+        //     // context.beginPath();
+        //     // context.moveTo(p.x, p.y);
+        //     // context.lineTo(p.x+1, p.y);
+        //     // context.stroke();
 
-            //context.putImageData(dot, p.x*scale, p.y*scale);
-        }
+        //     //context.putImageData(dot, p.x*scale, p.y*scale);
+        // }
+
+        context.save();
+
+        viewport(-2,-2,+2,+2);
+
+        context.beginPath();
+        context.moveTo(0, -1);
+        context.lineTo(0, +1);
+        context.moveTo(-1, 0);
+        context.lineTo(+1, 0);
+        context.stroke();
+
+        context.restore();
 
         context.lineWidth=1;
         context.fillStyle="#CCCCCC";
