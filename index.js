@@ -23,10 +23,10 @@
     }
 
     function update(){
-        context.fillStyle = 'rgba(32,32,32,1)';
+        context.fillStyle = 'rgba(32,32,32,0.3)';
         context.fillRect(0, 0, width, height);
 
-        context.fillStyle = 'rgba(255,255,255,1)';
+        context.fillStyle = '#FFFFFF';
         context.strokeStyle = '#FFFFFF';
         for (var i=0;i<particles.length;++i) {
             var p = particles[i];
