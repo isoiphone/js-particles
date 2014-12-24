@@ -21,17 +21,22 @@
         this.x = ~~(x + Math.random()*32-16);
         this.y = ~~(y + Math.random()*32-16);
     }
-
+    
     function update(){
         context.fillStyle = 'rgba(32,32,32,0.3)';
         context.fillRect(0, 0, width, height);
 
         context.fillStyle = '#FFFFFF';
         context.strokeStyle = '#FFFFFF';
+
         for (var i=0;i<particles.length;++i) {
             var p = particles[i];
 
             context.fillRect(p.x, p.y, 1, 1);
+
+            // context.beginPath();
+            // context.arc(p.x,p.y,10,0,2*Math.PI);
+            // context.fill();
 
             // context.beginPath();
             // context.moveTo(p.x, p.y);
@@ -82,11 +87,11 @@
         
         scale = devicePixelRatio / backingStoreRatio;
 
-        var oldWidth = window.innerWidth;
-        var oldHeight = window.innerHeight;
+        var oldWidth = width = window.innerWidth;
+        var oldHeight = height = window.innerHeight;
 
-        canvas.width = width = oldWidth * scale;
-        canvas.height = height = oldHeight * scale;
+        canvas.width = oldWidth * scale;
+        canvas.height = oldHeight * scale;
 
         canvas.style.width = oldWidth + 'px';
         canvas.style.height = oldHeight + 'px';
