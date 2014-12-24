@@ -12,16 +12,15 @@
 
     var width, height, scale,
         canvas, context,
-        particles,
         didInit;
 
-    var dot;
+    var particles, dot;
 
     function Particle(x,y){
         this.x = ~~(x + Math.random()*32-16);
         this.y = ~~(y + Math.random()*32-16);
     }
-    
+
     function update(){
         context.fillStyle = 'rgba(32,32,32,0.3)';
         context.fillRect(0, 0, width, height);
@@ -84,17 +83,16 @@
                                 context.msBackingStorePixelRatio ||
                                 context.oBackingStorePixelRatio ||
                                 context.backingStorePixelRatio || 1;
-        
+
         scale = devicePixelRatio / backingStoreRatio;
+        width = window.innerWidth;
+        height = window.innerHeight;
 
-        var oldWidth = width = window.innerWidth;
-        var oldHeight = height = window.innerHeight;
+        canvas.width = width * scale;
+        canvas.height = height * scale;
 
-        canvas.width = oldWidth * scale;
-        canvas.height = oldHeight * scale;
-
-        canvas.style.width = oldWidth + 'px';
-        canvas.style.height = oldHeight + 'px';
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
     }
 
     function mouseMove(e){
