@@ -14,7 +14,7 @@
         canvas, context, pointSize,
         didInit;
 
-    var particles, dot;
+    var particles, x=0.1, y=0.1;
 
     function Particle(x,y){
         this.x = ~~(x + Math.random()*32-16);
@@ -31,43 +31,26 @@
     }
 
     function update(){
-        context.fillStyle = 'rgba(32,32,32,0.3)';
-        context.fillRect(0, 0, width, height);
-
-        context.fillStyle = '#FFFFFF';
-        context.strokeStyle = '#FFFFFF';
-
-        // for (var i=0;i<particles.length;++i) {
-        //     var p = particles[i];
-
-        //     context.fillRect(p.x, p.y, 1, 1);
-
-        //     // context.beginPath();
-        //     // context.arc(p.x,p.y,10,0,2*Math.PI);
-        //     // context.fill();
-
-        //     // context.beginPath();
-        //     // context.moveTo(p.x, p.y);
-        //     // context.lineTo(p.x+1, p.y);
-        //     // context.stroke();
-
-        //     //context.putImageData(dot, p.x*scale, p.y*scale);
-        // }
-
         context.save();
 
-        viewport(-1,-1,+1,+1);
+        viewport(-1.86,-1.51,+1.86,+1.51);
 
-        context.beginPath();
-        context.moveTo(0, -1);
-        context.lineTo(0, +1);
-        context.moveTo(-1, 0);
-        context.lineTo(+1, 0);
+        var a = -0.966918,
+            b = 2.879879,
+            c = 0.765145,
+            d = 0.744728;
 
-        context.stroke();
+        var xnew,ynew,h;
+        for (var i=0; i<1000; ++i) {
+            xnew = Math.sin(y*b) + c*Math.sin(x*b);
+            ynew = Math.sin(x*a) + d*Math.sin(y*a);
+            x = xnew;
+            y = ynew;
 
-        context.fillStyle = "#FF00FF";
-        context.fillRect(0, 0, pointSize, pointSize);
+            h = 200 + (((x*y)*100)%100);
+            context.fillStyle = 'hsla(' + h + ',100%,66%,0.3)';
+            context.fillRect(x, y, pointSize, pointSize);
+        }
 
         context.restore();
 
@@ -88,14 +71,13 @@
         resizeCanvas();
         context.scale(scale, scale);
 
+        context.fillStyle = '#000000';
+        context.fillRect(0, 0, width, height);
+
         particles = [];
 
         if(!didInit){
             didInit = true;
-
-            dot = context.createImageData(1, 1);
-            dot[0] = dot[1] = dot[2] = dot[3] = 255;
-
             update();
             bindEvents();
         }
